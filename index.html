@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>FileSnap</title>
+    <script src="https://sdk.amazonaws.com/js/aws-sdk-2.100.0.min.js"></script>
+</head>
+<body>
+    <h2>🫰 FileSnap</h2>
+    <p>The fastest, simplest file sharing tool</p>
+    <br>
+    <br>
+    <input type="file" id="fileInput" />
+    <button onclick="uploadFile()">Get Snap Link</button>
+    <p id="link"></p>
+
+    <script>
+
+        const S3_BUCKET = 'filesnap';
+        const S3_REGION = 'us-east-2';
+        const AWS_ACCESS_KEY = 'AKIAZ3DVVI6LQNMF3O3C';
+        const AWS_SECRET_KEY = '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';
+
+        async function uploadFile() {
+            const fileInput = document.getElementById('fileInput');
+            const file = fileInput.files[0];
+            const fileName = file.name;
+            const fileType = file.type;
+
+            const s3 = new AWS.S3({
+                region: S3_REGION,
+                accessKeyId: AWS_ACCESS_KEY,
+                secretAccessKey: AWS_SECRET_KEY
+            });
+
+            const params = {
+                Bucket: S3_BUCKET,
+                Key: fileName,
+                Body: file,
+                ContentDisposition:"inline",
+                ContentType:fileType
+            };
+
+            s3.upload(params, (err, data) => {
+                if (err) {
+                    document.getElementById('status').innerText = 'Error occurred while uploading the file.';
+                    console.error(err);
+                } else if (data) {
+
+                    const fileUrl = data.Location;
+
+                    const shortenHeaders = {
+                        "Authorization":"Bearer rdCxJxR7Fh1a6aHF12UdGRC5A88jInfzMvOgB4tCk07sqiqvbtd2kZV8SxYb",
+                        "Content-Type":"application/json"
+                    };
+
+                    const payload = JSON.stringify({
+                    "long_url": fileUrl
+                    });
+
+                    const requestOptions = {
+                    method: 'POST',
+                    headers: shortenHeaders,
+                    body: payload
+                    };
+
+                    fetch("https://t.ly/api/v1/link/shorten", requestOptions)
+                    .then( async (response) => {
+
+                    let data = await response.json();
+
+                    if(data){
+
+                        document.getElementById('link').innerHTML = `<a href="${data.short_url}" target="_blank">${data.short_url}</a>`;
+                    
+                    } else {
+
+                        console.log('Error')
+                    }
+
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                    })
+                }
+            });
+        }
+    </script>
+</body>
+</html>
