@@ -17,8 +17,8 @@
 
         const S3_BUCKET = 'filesnap';
         const S3_REGION = 'us-east-2';
-        const AWS_ACCESS_KEY = 'AKIAZ3DVVI6LQNMF3O3C';
-        const AWS_SECRET_KEY = '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';
+        const AWS_ACCESS_KEY = config.s3key;
+        const AWS_SECRET_KEY = config.s3secret;
 
         async function uploadFile() {
             const fileInput = document.getElementById('fileInput');
