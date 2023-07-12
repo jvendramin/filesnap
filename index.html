@@ -4,8 +4,9 @@
     <title>FileSnap</title>
     <meta content='width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;' name='viewport' />
     <meta name="viewport" content="width=device-width" />
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🫰</text></svg>">
     <script src="https://sdk.amazonaws.com/js/aws-sdk-2.100.0.min.js"></script>
-    <script src="/etc/secrets/config.js"></script>
+    <script src="config.js"></script>
     <style>
 
         @font-face {
@@ -50,6 +51,7 @@
         h1 {
             color: black;
             font-family: customFontBOLD;
+            font-size: 45px;
         }
 
         table {
@@ -65,11 +67,12 @@
         button {
             background-color: #007bff;
             color: #ffffff;
-            padding: 10px 20px;
+            padding: 14px 30px 14px 30px;
             border: none;
             border-radius: 12px;
             cursor: pointer;
-            margin-bottom: 40px;
+            margin-top: 20px;
+            margin-bottom: 30px;
             font-family: customFont;
             font-weight: bolder;
         }
@@ -78,21 +81,25 @@
             background-color: #0069d9;
         }
 
-        p {
+        h4 {
             color: black;
             margin-bottom: 10px;
-            margin-top: -10px;
+            margin-top: -20px;
         }
 
         a {
             color: #007bff;
             text-decoration: none;
+            background-color: white;
+            border-radius: 12px;
+            border: 0.75px solid #007bff;
+            padding: 8px 20px 8px 20px;
         }
 
         /* Use a media query to add a breakpoint at 800px: */
         @media screen and (max-width: 600px) {
         .container {
-            width: 80%; /* The width is 100%, when the viewport is 800px or smaller */
+            width: 90%; /* The width is 100%, when the viewport is 800px or smaller */
             }
         }
 
@@ -103,7 +110,8 @@
     
     <div class="container">
         <h1>🫰 FileSnap</h1>
-        <p>The fastest, simplest file sharing tool.</p>
+        <h4>The fastest, simplest file sharing tool.</h4>
+        <p><em>All URLs expire after 24 hours.</em></p>
         <table>
             <tr>
                 <td>
@@ -112,13 +120,15 @@
             </tr>
         </table>
         <button onclick="uploadFile()">Get Snap Link</button>
+        <p id="linktext"></p>
         <p id="link"></p>
     </div>
     <script>
+
         const S3_BUCKET = 'filesnap';
         const S3_REGION = 'us-east-2';
-        const AWS_ACCESS_KEY = process.env.s3key;
-        const AWS_SECRET_KEY = process.env.s3secret;
+        const AWS_ACCESS_KEY = config.s3key;
+        const AWS_SECRET_KEY = config.s3secret;
 
         async function uploadFile() {
 
@@ -172,6 +182,7 @@
 
                     if(data){
 
+                        document.getElementById('linktext').innerHTML = `🔗 Your expiring link:`;
                         document.getElementById('link').innerHTML = `<a href="${data.short_url}" target="_blank">${data.short_url}</a>`;
                     
                     } else {
