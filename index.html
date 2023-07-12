@@ -5,8 +5,18 @@
     <meta content='width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;' name='viewport' />
     <meta name="viewport" content="width=device-width" />
     <script src="https://sdk.amazonaws.com/js/aws-sdk-2.100.0.min.js"></script>
-    <script type='text/javascript' src='config.js'></script>
+    <script src="config.js"></script>
     <style>
+
+        @font-face {
+            font-family: 'customFontBOLD'; /*a name to be used later*/
+            src: url('THICCCBOI-Bold.ttf'); /*URL to font*/
+        }
+
+        @font-face {
+            font-family: 'customFont'; /*a name to be used later*/
+            src: url('THICCCBOI-Regular.ttf'); /*URL to font*/
+        }
 
         html, body {
             overflow-x: hidden;
@@ -20,11 +30,12 @@
             align-items: center;
             overflow: hidden;
             text-align: center;
+            font-family: customFont;
         }
 
         .container {
             background-color: #ffffff;
-            border-radius: 8px;
+            border-radius: 12px;
             padding-top: 20px;
             padding-bottom: 40px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
@@ -38,6 +49,7 @@
 
         h1 {
             color: black;
+            font-family: customFontBOLD;
         }
 
         table {
@@ -55,9 +67,11 @@
             color: #ffffff;
             padding: 10px 20px;
             border: none;
-            border-radius: 4px;
+            border-radius: 12px;
             cursor: pointer;
             margin-bottom: 40px;
+            font-family: customFont;
+            font-weight: bolder;
         }
 
         button:hover {
@@ -88,7 +102,7 @@
 <body>
     <div class="container">
         <h1>🫰 FileSnap</h1>
-        <p>The fastest, simplest file sharing tool</p>
+        <p>The fastest, simplest file sharing tool.</p>
         <table>
             <tr>
                 <td>
@@ -107,6 +121,8 @@
         const AWS_SECRET_KEY = config.s3secret;
 
         async function uploadFile() {
+
+            try {
             const fileInput = document.getElementById('fileInput');
             const file = fileInput.files[0];
             const fileName = file.name;
@@ -169,7 +185,10 @@
                     })
                 }
             });
-        };
+        } catch(err) {
+            alert('Please upload a file')
+        }
+    }
     </script>
 </body>
 </html>
