@@ -114,11 +114,10 @@
         <p id="link"></p>
     </div>
     <script>
-
         const S3_BUCKET = 'filesnap';
         const S3_REGION = 'us-east-2';
-        const AWS_ACCESS_KEY = config.s3key;
-        const AWS_SECRET_KEY = config.s3secret;
+        const AWS_ACCESS_KEY = process.env.s3key;
+        const AWS_SECRET_KEY = process.env.s3secret;
 
         async function uploadFile() {
 
